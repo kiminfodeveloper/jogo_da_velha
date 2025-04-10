@@ -2,6 +2,8 @@
 
 Um jogo da velha moderno com visual neon/futurista, desenvolvido com HTML, CSS e JavaScript. Este projeto possui modo para dois jogadores e contra IA, interface adaptada a um tema escuro elegante.
 
+## Acesse ➡️ https://kiminfodeveloper.github.io/jogo_da_velha/
+
 ## 🕹️ Funcionalidades
 
 -   Interface responsiva e minimalista com tema neon
