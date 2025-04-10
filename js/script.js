@@ -6,299 +6,165 @@ let messageContainer = document.querySelector("#message");
 let messageText = document.querySelector("#message p");
 
 let secondPlayer;
-
-// contador de jogadas
+let gameOver = false;
 
 let player1 = 0;
 let player2 = 0;
 
-// adicionando o evento de click aos boxes
-
 for (let i = 0; i < boxes.length; i++) {
-  // quando alguem clica na caixa
-  boxes[i].addEventListener("click", function () {
-    let el = checkEl(player1, player2);
+    boxes[i].addEventListener("click", function () {
+        if (this.childNodes.length === 0 && !gameOver) {
+            let el = checkEl(player1, player2);
+            let cloneEl = el.cloneNode(true);
+            this.appendChild(cloneEl);
 
-    // verifica se tem x ou o
-    if (this.childNodes.length == 0) {
-      let cloneEl = el.cloneNode(true);
+            if (player1 === player2) {
+                player1++;
+                if (secondPlayer === "ai-player") {
+                    setTimeout(() => {
+                        computerPlay();
+                        player2++;
+                        checkWinCondition();
+                    }, 300);
+                }
+            } else {
+                player2++;
+            }
 
-      this.appendChild(cloneEl);
-
-      // computar jogada
-      if (player1 == player2) {
-        player1++;
-
-        if (secondPlayer == "ai-player") {
-          // função de executar a jogada
-          computerPlay();
-          player2++;
+            checkWinCondition();
         }
-      } else {
-        player2++;
-      }
-
-      //checar a condição de vitória
-      checkWinCondition();
-    }
-  });
+    });
 }
 
-// evento para saber se é 2 jogadores ou IA
 for (let i = 0; i < buttons.length; i++) {
-  buttons[i].addEventListener("click", function () {
-    secondPlayer = this.getAttribute("id");
+    buttons[i].addEventListener("click", function () {
+        secondPlayer = this.getAttribute("id");
 
-    for (let j = 0; j < buttons.length; j++) {
-      buttons[j].style.display = "none";
-    }
-    setTimeout(function () {
-      let container = document.querySelector("#container");
-      container.classList.remove("hide");
-    }, 500);
-  });
+        for (let j = 0; j < buttons.length; j++) {
+            buttons[j].style.display = "none";
+        }
+        setTimeout(function () {
+            document.querySelector("#container").classList.remove("hide");
+        }, 500);
+    });
 }
-// ver quem vai jogar
+
 function checkEl(player1, player2) {
-  if (player1 == player2) {
-    // x
-    el = x;
-  } else {
-    // o
-    el = o;
-  }
-  return el;
+    return player1 === player2 ? x : o;
 }
-
-// verificar quem ganhou
 
 function checkWinCondition() {
-  let b1 = document.getElementById("block-1");
-  let b2 = document.getElementById("block-2");
-  let b3 = document.getElementById("block-3");
-  let b4 = document.getElementById("block-4");
-  let b5 = document.getElementById("block-5");
-  let b6 = document.getElementById("block-6");
-  let b7 = document.getElementById("block-7");
-  let b8 = document.getElementById("block-8");
-  let b9 = document.getElementById("block-9");
+    const winPatterns = [
+        ["block-1", "block-2", "block-3"],
+        ["block-4", "block-5", "block-6"],
+        ["block-7", "block-8", "block-9"],
+        ["block-1", "block-4", "block-7"],
+        ["block-2", "block-5", "block-8"],
+        ["block-3", "block-6", "block-9"],
+        ["block-1", "block-5", "block-9"],
+        ["block-3", "block-5", "block-7"],
+    ];
 
-  //   horizontal topo
-  if (
-    b1.childNodes.length > 0 &&
-    b2.childNodes.length > 0 &&
-    b3.childNodes.length > 0
-  ) {
-    let b1Child = b1.childNodes[0].className;
-    let b2Child = b2.childNodes[0].className;
-    let b3Child = b3.childNodes[0].className;
+    for (let pattern of winPatterns) {
+        let [a, b, c] = pattern.map((id) => document.getElementById(id));
+        if (a.childNodes.length && b.childNodes.length && c.childNodes.length) {
+            let aClass = a.childNodes[0].className;
+            let bClass = b.childNodes[0].className;
+            let cClass = c.childNodes[0].className;
 
-    if (b1Child == "x" && b2Child == "x" && b3Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b1Child == "o" && b2Child == "o" && b3Child == "o") {
-      //  o
-      declareWinner("o");
+            if (aClass === bClass && bClass === cClass) {
+                declareWinner(aClass);
+                return;
+            }
+        }
     }
-  }
-  //   meio
-  if (
-    b4.childNodes.length > 0 &&
-    b5.childNodes.length > 0 &&
-    b6.childNodes.length > 0
-  ) {
-    let b4Child = b4.childNodes[0].className;
-    let b5Child = b5.childNodes[0].className;
-    let b6Child = b6.childNodes[0].className;
 
-    if (b4Child == "x" && b5Child == "x" && b6Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b4Child == "o" && b5Child == "o" && b6Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   horizontal baixo
-  if (
-    b7.childNodes.length > 0 &&
-    b8.childNodes.length > 0 &&
-    b9.childNodes.length > 0
-  ) {
-    let b7Child = b7.childNodes[0].className;
-    let b8Child = b8.childNodes[0].className;
-    let b9Child = b9.childNodes[0].className;
-
-    if (b7Child == "x" && b8Child == "x" && b9Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b7Child == "o" && b8Child == "o" && b9Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   vertical esquerda
-  if (
-    b1.childNodes.length > 0 &&
-    b4.childNodes.length > 0 &&
-    b7.childNodes.length > 0
-  ) {
-    let b1Child = b1.childNodes[0].className;
-    let b4Child = b4.childNodes[0].className;
-    let b7Child = b7.childNodes[0].className;
-
-    if (b1Child == "x" && b4Child == "x" && b7Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b1Child == "o" && b4Child == "o" && b7Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   vertical meio
-  if (
-    b2.childNodes.length > 0 &&
-    b5.childNodes.length > 0 &&
-    b8.childNodes.length > 0
-  ) {
-    let b2Child = b2.childNodes[0].className;
-    let b5Child = b5.childNodes[0].className;
-    let b8Child = b8.childNodes[0].className;
-
-    if (b2Child == "x" && b5Child == "x" && b8Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b2Child == "o" && b5Child == "o" && b8Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   vertical direita
-  if (
-    b3.childNodes.length > 0 &&
-    b6.childNodes.length > 0 &&
-    b9.childNodes.length > 0
-  ) {
-    let b3Child = b3.childNodes[0].className;
-    let b6Child = b6.childNodes[0].className;
-    let b9Child = b9.childNodes[0].className;
-
-    if (b3Child == "x" && b6Child == "x" && b9Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b3Child == "o" && b6Child == "o" && b9Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   diagonal começa esquerda
-  if (
-    b1.childNodes.length > 0 &&
-    b5.childNodes.length > 0 &&
-    b9.childNodes.length > 0
-  ) {
-    let b1Child = b1.childNodes[0].className;
-    let b5Child = b5.childNodes[0].className;
-    let b9Child = b9.childNodes[0].className;
-
-    if (b1Child == "x" && b5Child == "x" && b9Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b1Child == "o" && b5Child == "o" && b9Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   diagonal começa direita
-  if (
-    b3.childNodes.length > 0 &&
-    b5.childNodes.length > 0 &&
-    b7.childNodes.length > 0
-  ) {
-    let b3Child = b3.childNodes[0].className;
-    let b5Child = b5.childNodes[0].className;
-    let b7Child = b7.childNodes[0].className;
-
-    if (b3Child == "x" && b5Child == "x" && b7Child == "x") {
-      // x
-      declareWinner("x");
-    } else if (b3Child == "o" && b5Child == "o" && b7Child == "o") {
-      //  o
-      declareWinner("o");
-    }
-  }
-  //   deu velha
-  let counter = 0;
-  for (let i = 0; i < boxes.length; i++) {
-    if (boxes[i].childNodes[0] != undefined) {
-      counter++;
-    }
-  }
-  if (counter == 9) {
-    declareWinner("deu velha");
-  }
+    let filled = [...boxes].filter((box) => box.childNodes.length > 0).length;
+    if (filled === 9) declareWinner("deu velha");
 }
-
-// limpa o jogo, declara o vencedor e atualiza o placar
 
 function declareWinner(winner) {
-  let scoreboardX = document.querySelector("#scoreboard-1");
-  let scoreboardY = document.querySelector("#scoreboard-2");
-  let msg = "";
+    let scoreboardX = document.querySelector("#scoreboard-1");
+    let scoreboardY = document.querySelector("#scoreboard-2");
+    let msg = "";
 
-  if (winner == "x") {
-    msg = "O jogador 1 venceu!";
-    scoreboardX.textContent = parseInt(scoreboardX.textContent) + 1;
-  } else if (winner == "o") {
-    msg = "O jogador 2 venceu!";
-    scoreboardY.textContent = parseInt(scoreboardY.textContent) + 1;
-  } else {
-    msg = "Deu velha!";
-  }
-  //   exibir a mensagem
-  messageText.innerHTML = msg;
-  messageContainer.classList.remove("hide");
+    if (winner === "x") {
+        msg = "O jogador 1 venceu!";
+        scoreboardX.textContent = parseInt(scoreboardX.textContent) + 1;
+    } else if (winner === "o") {
+        msg = "O jogador 2 venceu!";
+        scoreboardY.textContent = parseInt(scoreboardY.textContent) + 1;
+    } else {
+        msg = "Deu velha!";
+    }
 
-  //   esconde msg
-  setTimeout(function () {
-    messageContainer.classList.add("hide");
-  }, 3000);
+    messageText.innerHTML = msg;
+    messageContainer.classList.remove("hide");
+    gameOver = true;
 
-  //   limpar as jogadas
-
-  player1 = 0;
-  player2 = 0;
-
-  //   remove x e o
-
-  let boxesToRemove = document.querySelectorAll(".box div");
-
-  for (let i = 0; i < boxesToRemove.length; i++) {
-    boxesToRemove[i].parentNode.removeChild(boxesToRemove[i]);
-  }
+    setTimeout(() => {
+        messageContainer.classList.add("hide");
+        resetGame();
+    }, 3000);
 }
 
-// executar jogada da IA
+function resetGame() {
+    gameOver = false;
+    player1 = 0;
+    player2 = 0;
+    boxes.forEach((box) => {
+        if (box.firstChild) {
+            box.removeChild(box.firstChild);
+        }
+    });
+}
 
 function computerPlay() {
-  let cloneO = o.cloneNode(true);
-  counter = 0;
-  filled = 0;
+    let cloneO = o.cloneNode(true);
+    let emptyBoxes = Array.from(boxes).filter((box) => !box.hasChildNodes());
 
-  for (let i = 0; i < boxes.length; i++) {
-    let randomNumber = Math.floor(Math.random() * 5);
-    if (boxes[i].childNodes[0] == undefined) {
-      if (randomNumber <= 1) {
-        boxes[i].appendChild(cloneO);
-        counter++;
-        break;
-      }
-    } else {
-      filled++;
+    if (emptyBoxes.length === 0) return;
+
+    // Lógica simples: se possível, bloqueia ou ganha
+    let placed = false;
+
+    function tryWinningOrBlocking(symbol) {
+        for (let pattern of [
+            ["block-1", "block-2", "block-3"],
+            ["block-4", "block-5", "block-6"],
+            ["block-7", "block-8", "block-9"],
+            ["block-1", "block-4", "block-7"],
+            ["block-2", "block-5", "block-8"],
+            ["block-3", "block-6", "block-9"],
+            ["block-1", "block-5", "block-9"],
+            ["block-3", "block-5", "block-7"],
+        ]) {
+            let [a, b, c] = pattern.map((id) => document.getElementById(id));
+            let [aC, bC, cC] = [a, b, c].map(
+                (el) => el.childNodes[0]?.className
+            );
+
+            let values = [aC, bC, cC];
+            let counts = values.reduce((acc, val) => {
+                if (val === symbol) acc++;
+                return acc;
+            }, 0);
+
+            if (counts === 2 && values.includes(undefined)) {
+                let emptyIndex = values.indexOf(undefined);
+                let target = [a, b, c][emptyIndex];
+                target.appendChild(cloneO);
+                placed = true;
+                return;
+            }
+        }
     }
-  }
 
-  if (counter == 0 && filled < 9) {
-    computerPlay();
-  }
+    tryWinningOrBlocking("o");
+    if (!placed) tryWinningOrBlocking("x");
+
+    if (!placed) {
+        let randIndex = Math.floor(Math.random() * emptyBoxes.length);
+        emptyBoxes[randIndex].appendChild(cloneO);
+    }
 }

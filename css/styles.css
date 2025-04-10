@@ -1,129 +1,163 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fundo futurista minimalista */
 body {
-  text-align: center;
-  font-family: Helvetica, sans-serif;
+    font-family: "Courier New", monospace;
+    text-align: center;
+    background: radial-gradient(circle at top, #1e2a3a, #0f1c2e);
+    color: #c0fefe;
+    min-height: 100vh;
 }
 
+/* Título */
 h1 {
-  font-size: 42px;
+    font-size: 42px;
+    color: #00ffe7;
+    text-shadow: 0 0 8px #00ffe7;
+    margin-bottom: 20px;
 }
 
-/* botões */
-
+/* Botões */
 #buttons-container button {
-  border: none;
-  padding: 10px 15px;
-  margin: 0 10px;
+    border: 2px solid #00ffe7;
+    background-color: transparent;
+    color: #00ffe7;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+    box-shadow: 0 0 8px #00ffe7;
 }
 
-/* jogo */
+#buttons-container button:hover {
+    background-color: #00ffe7;
+    color: #0f1c2e;
+    box-shadow: 0 0 12px #00ffe7;
+}
 
+/* Container do jogo */
 #container {
-  display: flex;
-  width: 300px;
-  margin: 0;
-  flex-direction: row;
-  flex-wrap: wrap;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
+    display: flex;
+    width: 300px;
+    margin: 0 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
 }
 
+/* Células do jogo */
 .box {
-  height: 100px;
-  border: 5px solid #000;
-  box-sizing: border-box;
-  flex: 1 1 33%;
+    height: 100px;
+    flex: 1 1 33%;
+    border: 2px solid #00c0ff;
+    background-color: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 0 6px #00c0ff;
+    transition: 0.2s;
 }
 
+.box:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 12px #00c0ff;
+}
+
+/* Remoção de bordas para o tabuleiro */
 #block-1,
 #block-2,
 #block-3 {
-  border-top: none;
+    border-top: none;
 }
-
 #block-1,
 #block-4,
 #block-7 {
-  border-left: none;
+    border-left: none;
 }
-
 #block-3,
 #block-6,
 #block-9 {
-  border-right: none;
+    border-right: none;
 }
-
 #block-7,
 #block-8,
 #block-9 {
-  border-bottom: none;
+    border-bottom: none;
 }
 
-/* simbolos */
-
+/* Símbolos */
 .x {
-  font-size: 65px;
-  color: red;
-  display: inline-block;
-  line-height: 100px;
+    font-size: 65px;
+    color: #00ffe7;
+    line-height: 100px;
+    text-shadow: 0 0 10px #00ffe7;
 }
 
 .o {
-  height: 50px;
-  width: 50px;
-  border: 5px solid green;
-  border-radius: 50%;
-  display: inline-block;
-  margin-top: 17px;
+    height: 50px;
+    width: 50px;
+    border: 5px solid #a64eff;
+    border-radius: 50%;
+    display: inline-block;
+    margin-top: 17px;
+    box-shadow: 0 0 8px #a64eff;
 }
 
-/* esconder */
+/* Esconder */
 .hide {
-  display: none !important;
+    display: none !important;
 }
 
-/* placar */
-
+/* Placar */
 #scoreboard-container {
-  font-weight: bold;
-  margin: 30px;
-  font-size: 25px;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
+    font-weight: bold;
+    margin: 30px auto;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
 .score-box {
-  margin: 0 20px;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
 }
 
 #x-scoreboard {
-  color: red;
-  margin-right: 3px;
+    color: #00ffe7;
+    text-shadow: 0 0 8px #00ffe7;
 }
 
 #o-scoreboard {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 2px solid green;
-  border-radius: 50%;
-  margin: 0 2px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #a64eff;
+    border-radius: 50%;
+    margin: 0 2px;
+    box-shadow: 0 0 6px #a64eff;
 }
 
-/* msg de vitória */
-
+/* Mensagem de vitória */
 #message p {
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  top: 150px;
-  width: 500px;
-  font-size: 50px;
-  background-color: #000;
-  color: #fff;
-  border-radius: 2em;
-  padding: 20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 150px;
+    width: 500px;
+    margin: 0 auto;
+    font-size: 36px;
+    background-color: rgba(14, 22, 39, 0.85);
+    color: #00ffe7;
+    border-radius: 2em;
+    padding: 20px;
+    box-shadow: 0 0 15px #00ffe7;
+    text-shadow: 0 0 6px #00ffe7;
+    z-index: 10;
 }
